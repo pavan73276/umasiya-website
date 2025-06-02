@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// ✅ Import the image properly
+import welcomeImg from "../../assets/homepg/welcome.jpg";
+
 const WelcomeSection = () => {
   const navigate = useNavigate();
 
@@ -9,7 +12,7 @@ const WelcomeSection = () => {
       {/* Image Section */}
       <div className="w-full md:w-1/3 flex justify-center">
         <img
-          src="src/assets/homepg/welcome.jpg"
+          src={welcomeImg}
           alt="Welcome"
           className="rounded-lg shadow-md w-full max-w-[300px] h-auto object-cover"
         />

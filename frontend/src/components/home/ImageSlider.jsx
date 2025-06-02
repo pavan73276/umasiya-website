@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 
+// ✅ Import images directly so they are included in the build
+import s1 from "../../assets/homepg/autoslider/s1.jpg";
+import s2 from "../../assets/homepg/autoslider/s2.jpg";
+import s3 from "../../assets/homepg/autoslider/s3.jpg";
+import s4 from "../../assets/homepg/autoslider/s4.jpg";
+import s5 from "../../assets/homepg/autoslider/s5.jpg";
+
 const slides = [
-  { image: "src/assets/homepg/autoslider/s1.jpg" },
-  { image: "src/assets/homepg/autoslider/s2.jpg" },
-  { image: "src/assets/homepg/autoslider/s3.jpg" },
-  { image: "src/assets/homepg/autoslider/s4.jpg" },
-  { image: "src/assets/homepg/autoslider/s5.jpg" },
+  { image: s1 },
+  { image: s2 },
+  { image: s3 },
+  { image: s4 },
+  { image: s5 },
 ];
 
 const ImageSlider = ({ children }) => {

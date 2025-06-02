@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 export const fetchNotices = createAsyncThunk("notice/fetchNotices", async () => {
-  const { data } = await axios.get(`http://localhost:4000/notice/all`);
+  const { data } = await axios.get(`https://umasiya-website-1.onrender.com/notice/all`);
   return data.notices;
 });
 
