@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const sendMessage = createAsyncThunk("message/sendMessage", async (formData, { rejectWithValue }) => {
   try {
-    const { data } = await axios.post(`https://umasiya-website-1.onrender.com/message/send`, formData);
+    const { data } = await axios.post(`https://umasiya-website-2.onrender.com/message/send`, formData);
     return data.message;
   } catch (err) {
     return rejectWithValue(err.response?.data?.message || "Failed to send message");
