@@ -10,7 +10,7 @@ const app = express();
 config({ path: "./config/config.env" });
 
 const allowedOrigins = [
-  "https://fantastic-melba-68f6b8.netlify.app/",
+  "https://flourishing-custard-43e0ba.netlify.app/",
   "http://localhost:5173"
 ];
 
