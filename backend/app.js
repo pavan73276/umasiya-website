@@ -13,14 +13,9 @@ import {cloudinaryConnect} from "./config/cloudinary.js";
 const app = express();
 config({ path: "./config/config.env" });
 
-const allowedOrigins = [
-  "https://flourishing-custard-43e0ba.netlify.app",
-  "http://localhost:5173"
-];
-
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL_ONE, process.env.FRONTEND_URL_TWO, process.env.FRONTEND_URL_THREE, "https://umasiya.com"],
+    origin: ["https://umasiya.com", "https://flourishing-custard-43e0ba.netlify.app/", "http://localhost:5173", "http://localhost:5174"],
     method: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
