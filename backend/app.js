@@ -15,7 +15,7 @@ config({ path: "./config/config.env" });
 
 app.use(
   cors({
-    origin: ["https://umasiya.com", "https://flourishing-custard-43e0ba.netlify.app/", "http://localhost:5173", "http://localhost:5174"],
+    origin: ["https://umasiya.com", "https://flourishing-custard-43e0ba.netlify.app/", "http://localhost:5173", "http://localhost:5174", "https://umasiya-website.onrender.com"],
     method: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
