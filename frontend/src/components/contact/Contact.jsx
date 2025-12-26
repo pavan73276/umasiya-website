@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { sendMessage } from "../store/slices/messageSlice";
+import { sendMessage } from "../../store/slices/messageSlice";
 import { toast } from "react-toastify";
 
 const Contact = () => {

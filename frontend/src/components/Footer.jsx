@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaEnvelope, FaPhone, FaBuilding } from "react-icons/fa";
+import logo from "../assets/logof.png";
 
 const Footer = () => {
   return (
@@ -9,8 +10,8 @@ const Footer = () => {
         
         {/* Logo */}
         <div>
-          <h2 className="text-2xl font-bold tracking-wide mb-3">UMASiYA</h2>
-          <p className="text-sm">
+          <img src={logo} alt="UMASIYA Logo" className="w-72 h-auto mb-3" />
+          <p className="text-sm text-center sm:text-left mt-1">
             Empowering knowledge, enabling growth. Join our journey!
           </p>
         </div>
@@ -51,19 +52,19 @@ const Footer = () => {
           <ul className="space-y-3 text-sm">
             <li className="flex items-start gap-2">
               <FaMapMarkerAlt className="mt-1 text-blue-400" />
-              Head Office: 123 Street Name, City, Country
+              Head Office: Ramshila More, Chhoti Road, Ramshila, Nawada, Gaya, Bihar 823002
             </li>
             <li className="flex items-start gap-2">
               <FaBuilding className="mt-1 text-blue-400" />
-              Corporate Office: 456 Business Park, City
+              Corporate Office: Ramshila More, Chhoti Road, Ramshila, Nawada, Gaya, Bihar 823002
             </li>
             <li className="flex items-start gap-2">
               <FaEnvelope className="mt-1 text-blue-400" />
-              contact@umasiya.com
+              umasiyaspil@gmail.com
             </li>
             <li className="flex items-start gap-2">
               <FaPhone className="mt-1 text-blue-400" />
-              +91 98765 43210
+              +91 6205812522
             </li>
           </ul>
         </div>

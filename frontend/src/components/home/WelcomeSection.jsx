@@ -20,7 +20,7 @@ const WelcomeSection = () => {
 
       {/* Text Section */}
       <div className="w-full md:w-2/3 text-center md:text-left">
-        <h2 className="text-3xl font-bold text-blue-800 mb-4">Welcome to UMASiYA!</h2>
+        <h2 className="text-3xl font-bold text-blue-800 mb-4">Welcome to UMASIYA!</h2>
         <p className="text-gray-700 mb-6 leading-relaxed">
           We are thrilled to welcome you to our platform where knowledge meets opportunity.
           Join us in shaping the future together!

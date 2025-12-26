@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://umasiya.com/sitemap.xml

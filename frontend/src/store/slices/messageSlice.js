@@ -1,10 +1,12 @@
 // src/store/slices/messageSlice.js
+// http://localhost:4000
+// https://umasiya-website.onrender.com
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const sendMessage = createAsyncThunk("message/sendMessage", async (formData, { rejectWithValue }) => {
   try {
-    const { data } = await axios.post(`https://umasiya-website.onrender.com/message/send`, formData);
+    const { data } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/message/send`, formData);
     return data.message;
   } catch (err) {
     return rejectWithValue(err.response?.data?.message || "Failed to send message");
@@ -44,3 +46,4 @@ const messageSlice = createSlice({
 
 export const { clearMessages } = messageSlice.actions;
 export default messageSlice.reducer;
+

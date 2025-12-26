@@ -3,7 +3,7 @@ import Notices from "../components/Notices";
 
 const NoticesPage = () => {
   return (
-    <div className="p-4">
+    <div className="pt-[90px] p-4 max-w-7xl mx-auto">
       <Notices />
     </div>
   );

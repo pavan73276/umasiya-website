@@ -1,10 +1,12 @@
 // src/store/slices/noticeSlice.js
+// http://localhost:4000
+// https://umasiya-website.onrender.com
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
 export const fetchNotices = createAsyncThunk("notice/fetchNotices", async () => {
-  const { data } = await axios.get(`https://umasiya-website.onrender.com/notice/all`);
+  const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/notice/all`);
   return data.notices;
 });
 

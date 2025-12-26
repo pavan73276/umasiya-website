@@ -1,10 +1,17 @@
 import React from "react";
+import OfficeSection from "../components/aboutus/officeSection";
+import DirectorSection from "../components/aboutus/DirectorSection";
+import FounderSection from "../components/aboutus/FounderSection";
+import StatsSection from "../components/aboutus/StatsSection";
 
 const About = () => {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <h1 className="text-3xl font-semibold text-gray-600">About Us Page - Coming Soon</h1>
-    </div>
+    <>
+      <OfficeSection />
+      <DirectorSection />
+      <FounderSection />
+      <StatsSection />
+    </>
   );
 };
 

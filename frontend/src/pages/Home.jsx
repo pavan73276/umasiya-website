@@ -1,29 +1,30 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import ImageSlider from "../components/home/ImageSlider";
 import FeatureBoxes from "../components/home/FeatureBoxes";
 import AnnouncementTicker from "../components/home/AnnouncementTicker";
 import WelcomeSection from "../components/home/WelcomeSection";
+import OurTeamSection from "../components/home/OurTeamSection";
 
 const Home = () => {
   return (
     <div className="w-full min-h-screen bg-gray-100">
-      {/* Always visible Navbar */}
-      
-
-      {/* ImageSlider Section with FeatureBoxes overlay */}
-      <section className="relative w-full h-[100vh] overflow-hidden">
-        <ImageSlider>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[20%] w-full px-4 sm:px-8 lg:px-20 z-20">
-            <FeatureBoxes />
-          </div>
-        </ImageSlider>
+      {/* 🔹 Fullscreen Image Slider with padding and top spacing */}
+      <section className="relative w-full pt-20">
+        <div className="w-full px-4 md:px-8 lg:px-16 mx-auto rounded-xl overflow-hidden">
+          <ImageSlider />
+        </div>
       </section>
 
-      {/* Remaining sections */}
-      <section className="relative z-20 mt-8">
+      {/* 🔹 Feature Section directly below slider */}
+      <section className="relative z-20 -mt-12">
+        <FeatureBoxes />
+      </section>
+
+      {/* 🔹 Remaining Sections */}
+      <section className="relative z-10 mt-4">
         <AnnouncementTicker />
         <WelcomeSection />
+        <OurTeamSection />
       </section>
     </div>
   );
