@@ -20,7 +20,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL_ONE, process.env.FRONTEND_URL_TWO, process.env.FRONTEND_URL_THREE],
+    origin: [process.env.FRONTEND_URL_ONE, process.env.FRONTEND_URL_TWO, process.env.FRONTEND_URL_THREE, "https://umasiya.com"],
     method: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
