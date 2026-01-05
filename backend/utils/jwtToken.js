@@ -1,6 +1,6 @@
 export const generateToken = (user, message, statusCode, res) => {
   // 🔴 ADD THESE LINES AT THE VERY TOP
-  const cookieExpireDays = Number(process.env.COOKIE_EXPIRE);
+  const cookieExpireDays = Number(process.env.COOKIE_EXPIRE || 7);
 
   if (!cookieExpireDays || isNaN(cookieExpireDays)) {
     throw new Error("COOKIE_EXPIRE must be a valid number (in days)");
