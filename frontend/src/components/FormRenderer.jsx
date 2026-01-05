@@ -15,7 +15,7 @@ const FormRenderer = () => {
   const {
     loading,
     form: selectedForm,
-    submitSuccess,
+    successMessage,
     error,
   } = useSelector((state) => state.form);
 
@@ -38,7 +38,7 @@ const FormRenderer = () => {
      HANDLE SIDE EFFECTS
   =============================== */
   useEffect(() => {
-    if (submitSuccess) {
+    if (successMessage) {
       toast.success("Form submitted successfully!");
       setResponses({});
       dispatch(clearFormState());
@@ -47,7 +47,7 @@ const FormRenderer = () => {
     if (error) {
       toast.error(error);
     }
-  }, [submitSuccess, error, dispatch]);
+  }, [successMessage, error, dispatch]);
 
   /* ===============================
      HANDLERS
