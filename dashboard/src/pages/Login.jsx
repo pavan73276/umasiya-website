@@ -48,7 +48,7 @@ const Login = () => {
     }
     if (isAuthenticated === "admin") {
       toast.success("Admin Login successfully");
-      navigateTo("/admin");
+      navigateTo("/admin/forms");
     }
   }, [dispatch, error, loading, isAuthenticated, navigateTo]);
 
