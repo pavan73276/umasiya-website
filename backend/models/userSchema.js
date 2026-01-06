@@ -70,9 +70,18 @@ userSchema.methods.generateJsonWebToken = function () {
   if (!process.env.JWT_SECRET_KEY) {
     throw new Error("JWT_SECRET_KEY not defined");
   }
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES || "7d",
-  });
+
+  // Safe default for production if env is missing
+  const expiresIn =
+    process.env.JWT_EXPIRES && typeof process.env.JWT_EXPIRES === "string"
+      ? process.env.JWT_EXPIRES
+      : "7d";
+
+  return jwt.sign(
+    { id: this._id, role: this.role },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn }
+  );
 };
 
 export const User = mongoose.model("User", userSchema);

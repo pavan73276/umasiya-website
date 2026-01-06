@@ -6,99 +6,129 @@ const adminSlice = createSlice({
   name: "admin",
   initialState: {
     loading: false,
-    admin: {},
-    staffs: {},
+    staffs: [],       // ✅ array
     error: null,
     message: null,
   },
+
   reducers: {
-    adminRequest(state, action) {
+    adminRequest(state) {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     },
-    addNewAdminRequest(state, action) {
-      state.loading = true;
-    },
+
     addNewAdminSuccess(state, action) {
       state.loading = false;
       state.message = action.payload.message;
     },
-    addNewAdminFailed(state, action) {
-      state.loading = false;
-      state.error = action.payload.error;
-    },
-    addNewStaffRequest(state, action) {
-      state.loading = true;
-    },
+
     addNewStaffSuccess(state, action) {
       state.loading = false;
       state.message = action.payload.message;
     },
-    addNewStaffFailed(state, action) {
-      state.loading = false;
-      state.error = action.payload.error;
-    },
+
     getAllStaffSuccess(state, action) {
       state.loading = false;
       state.staffs = action.payload.staffs;
     },
-    
-    adminFailed(state, action) {
+
+    adminFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
-    clearAdminErrors(state) {
+
+    clearAdminState(state) {
       state.error = null;
-    }
+      state.message = null;
+    },
   },
 });
 
+export const {
+  adminRequest,
+  addNewAdminSuccess,
+  addNewStaffSuccess,
+  getAllStaffSuccess,
+  adminFailure,
+  clearAdminState,
+} = adminSlice.actions;
+
+/* =======================
+   ADD NEW ADMIN
+======================= */
 export const addNewAdmin = (data) => async (dispatch) => {
-  dispatch(adminSlice.actions.addNewAdminRequest());
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/admin/addnew`, data, {
-      withCredentials: true,
-    });
-    dispatch(adminSlice.actions.addNewAdminSuccess(response.data));
-    toast.success('New Admin Added');
+    dispatch(adminRequest());
+
+    const { data: res } = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/user/admin/addnew`,
+      data,
+      { withCredentials: true }
+    );
+
+    dispatch(addNewAdminSuccess(res));
+    toast.success("New Admin Added");
   } catch (error) {
-    const message = error.response?.data?.message || error.message || "Failed to add admin";
-    dispatch(adminSlice.actions.addNewAdminFailed(message));
+    dispatch(
+      adminFailure(
+        error.response?.data?.message || "Failed to add admin"
+      )
+    );
   }
 };
 
+/* =======================
+   ADD NEW STAFF
+======================= */
 export const addNewStaff = (data) => async (dispatch) => {
-  dispatch(adminSlice.actions.addNewStaffRequest());
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/staff/addnew`, data, {
-      withCredentials: true,
-    });
-    dispatch(adminSlice.actions.addNewStaffSuccess(response.data));
-    toast.success('New Staff Added');
+    dispatch(adminRequest());
+
+    const { data: res } = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/user/staff/addnew`,
+      data,
+      { withCredentials: true }
+    );
+
+    dispatch(addNewStaffSuccess(res));
+    toast.success("New Staff Added");
   } catch (error) {
-    const message = error.response?.data?.message || error.message || "Failed to add staff";
-    dispatch(adminSlice.actions.addNewStaffFailed(message));
+    dispatch(
+      adminFailure(
+        error.response?.data?.message || "Failed to add staff"
+      )
+    );
   }
 };
 
-
-
+/* =======================
+   GET ALL STAFF
+======================= */
 export const getAllStaff = () => async (dispatch) => {
-  dispatch(adminSlice.actions.adminRequest());
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/staff`, {
-      withCredentials: true,
-    });
-    
-    dispatch(adminSlice.actions.getAllStaffSuccess(response.data));
+    dispatch(adminRequest());
+
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/user/staff`,
+      { withCredentials: true }
+    );
+
+    dispatch(getAllStaffSuccess(data));
   } catch (error) {
-    const message = error.response?.data?.message || error.message || "An error occurred";
-    dispatch(adminSlice.actions.adminFailed(message));
+    dispatch(
+      adminFailure(
+        error.response?.data?.message || "Failed to fetch staff"
+      )
+    );
   }
 };
 
-
-export const clearAllUserErrors = () => (dispatch) => {
-  dispatch(adminSlice.actions.clearAllUserErrors());
+/* =======================
+   CLEAR ERRORS / MESSAGES
+======================= */
+export const clearAdminErrors = () => (dispatch) => {
+  dispatch(clearAdminState());
 };
 
 export default adminSlice.reducer;

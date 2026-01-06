@@ -2,21 +2,15 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import { User } from "../models/userSchema.js";
 import ErrorHandler from "../middlewares/error.js";
 import { generateToken } from "../utils/jwtToken.js";
-import otpGenerator  from "otp-generator";
-import {OTP} from  "../models/otpSchema.js";
+import otpGenerator from "otp-generator";
+import { OTP } from "../models/otpSchema.js";
+
+/* ===================== REGISTER ===================== */
 
 export const userRegister = catchAsyncErrors(async (req, res, next) => {
-  const { firstName, lastName, email, phone, dob, gender, password } =
-    req.body;
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !phone ||
-    !dob ||
-    !gender ||
-    !password
-  ) {
+  const { firstName, lastName, email, phone, dob, gender, password } = req.body;
+
+  if (!firstName || !lastName || !email || !phone || !dob || !gender || !password) {
     return next(new ErrorHandler("Please Fill Full Form!", 400));
   }
 
@@ -33,15 +27,17 @@ export const userRegister = catchAsyncErrors(async (req, res, next) => {
     dob,
     gender,
     password,
-    role: "admin",
+    role: "User", // unchanged as per your structure
   });
 
   generateToken(user, "Registered Successfully!", 201, res);
 });
 
+/* ===================== LOGIN ===================== */
+
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { email, password, role } = req.body;
-  
+
   if (!email || !password || !role) {
     return next(new ErrorHandler("Please Fill Full Form!", 400));
   }
@@ -55,24 +51,21 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   if (!isPasswordMatch) {
     return next(new ErrorHandler("Invalid Email Or Password!", 400));
   }
-  // if (role !== user.role) {
-  //   return next(new ErrorHandler(`User Not Found With This Role!`, 400));
-  // }
-  generateToken(user, "Login Successfully!", 201, res);
+
+  // 🔴 REQUIRED IN PRODUCTION
+  if (user.role !== role) {
+    return next(new ErrorHandler("Unauthorized role access", 403));
+  }
+
+  generateToken(user, "Login Successfully!", 200, res);
 });
 
+/* ===================== ADD ADMIN ===================== */
+
 export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
-  const { firstName, lastName, email, phone, dob, gender, password } =
-    req.body;
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !phone ||
-    !dob ||
-    !gender ||
-    !password
-  ) {
+  const { firstName, lastName, email, phone, dob, gender, password } = req.body;
+
+  if (!firstName || !lastName || !email || !phone || !dob || !gender || !password) {
     return next(new ErrorHandler("Please Fill Full Form!", 400));
   }
 
@@ -92,8 +85,6 @@ export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
     role: "admin",
   });
 
-  console.log("new admin added");
-  
   res.status(200).json({
     success: true,
     message: "New Admin Registered",
@@ -101,36 +92,18 @@ export const addNewAdmin = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
+/* ===================== ADD STAFF ===================== */
 
 export const addNewStaff = catchAsyncErrors(async (req, res, next) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    phone,
-    dob,
-    gender,
-    password,
-  } = req.body;
+  const { firstName, lastName, email, phone, dob, gender, password } = req.body;
 
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !phone ||
-    !dob ||
-    !gender ||
-    !password
-  ) {
+  if (!firstName || !lastName || !email || !phone || !dob || !gender || !password) {
     return next(new ErrorHandler("Please Fill Full Form!", 400));
   }
 
   const isRegistered = await User.findOne({ email });
   if (isRegistered) {
-    return next(
-      new ErrorHandler("staff With This Email Already Exists!", 400)
-    );
+    return next(new ErrorHandler("Staff With This Email Already Exists!", 400));
   }
 
   const staff = await User.create({
@@ -141,39 +114,46 @@ export const addNewStaff = catchAsyncErrors(async (req, res, next) => {
     dob,
     gender,
     password,
-    role: "staff"
+    role: "staff",
   });
 
   res.status(200).json({
     success: true,
-    message: "New staff Registered",
+    message: "New Staff Registered",
     staff,
   });
 });
 
-export const getAllStaffs = catchAsyncErrors(async (req, res, next) => {
+/* ===================== GET STAFF ===================== */
+
+export const getAllStaffs = catchAsyncErrors(async (req, res) => {
   const staffs = await User.find({ role: "staff" });
+
   res.status(200).json({
     success: true,
     staffs,
   });
 });
 
-export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
-  const user = req.user;
+/* ===================== GET USER ===================== */
+
+export const getUserDetails = catchAsyncErrors(async (req, res) => {
   res.status(200).json({
     success: true,
-    user,
+    user: req.user,
   });
 });
 
-// Logout function for dashboard admin
-export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
+/* ===================== LOGOUTS ===================== */
+
+export const logoutAdmin = catchAsyncErrors(async (req, res) => {
   res
-    .status(201)
+    .status(200)
     .cookie("adminToken", "", {
       httpOnly: true,
-      expires: new Date(Date.now()),
+      secure: true,
+      sameSite: "None",
+      expires: new Date(0),
     })
     .json({
       success: true,
@@ -181,100 +161,96 @@ export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-
-// Logout function for dashboard staff
-export const logoutStaff = catchAsyncErrors(async (req, res, next) => {
+export const logoutStaff = catchAsyncErrors(async (req, res) => {
   res
-    .status(201)
+    .status(200)
     .cookie("staffToken", "", {
       httpOnly: true,
-      expires: new Date(Date.now()),
+      secure: true,
+      sameSite: "None",
+      expires: new Date(0),
     })
     .json({
       success: true,
-      message: "staff Logged Out Successfully.",
+      message: "Staff Logged Out Successfully.",
     });
 });
 
-// Logout function for frontend user
-export const logoutUser = catchAsyncErrors(async (req, res, next) => {
+export const logoutUser = catchAsyncErrors(async (req, res) => {
   res
-    .status(201)
+    .status(200)
     .cookie("userToken", "", {
       httpOnly: true,
-      expires: new Date(Date.now()),
+      secure: true,
+      sameSite: "None",
+      expires: new Date(0),
     })
     .json({
       success: true,
-      message: "user Logged Out Successfully.",
+      message: "User Logged Out Successfully.",
     });
 });
 
-export const updatePassword = catchAsyncErrors(async(req, res, next) => {
-  const {currentPassword, newPassword} = req.body;
+/* ===================== PASSWORD ===================== */
+
+export const updatePassword = catchAsyncErrors(async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
 
   const user = await User.findById(req.user.id).select("+password");
 
   const isPasswordMatched = await user.comparePassword(currentPassword);
-  
-  if(!isPasswordMatched){
+  if (!isPasswordMatched) {
     return next(new ErrorHandler("Old password is incorrect", 400));
-  }
-
-  user.password = req.body.newPassword;
-  await user.save();
-  
-  sendToken(user, 200, res, "Password updated successfully");
-});
-
-export const resetPassword = catchAsyncErrors(async(req, res, next) => {
-  const {email, newPassword} = req.body;
-
-  const user = await User.findOne({email, role: 'User'});
-
-  if(!user){
-    return next(new ErrorHandler("user with given email doest not exist", 400));
   }
 
   user.password = newPassword;
   await user.save();
-  
+
   res.status(200).json({
     success: true,
-    message: 'Password Change successfully',
-  })
+    message: "Password updated successfully",
+  });
 });
 
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+  const { email, newPassword } = req.body;
 
-export const sendotp = catchAsyncErrors(async (req, res, next) =>  {
-  
-    const { email } = req.body
+  const user = await User.findOne({ email, role: "User" });
+  if (!user) {
+    return next(new ErrorHandler("User with given email does not exist", 400));
+  }
 
-    var otp = otpGenerator.generate(6, {
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false,
-    })
+  user.password = newPassword;
+  await user.save();
 
-    let result = await OTP.findOne({ otp: otp })
-    //console.log("Result is Generate OTP Func")
-    console.log("OTP", otp)
-    //console.log("Result", result)
-    while (result) {
-      otp = otpGenerator.generate(6, {
-        upperCaseAlphabets: false,
-      })
-     result = await OTP.findOne({ otp: otp })
-    }
+  res.status(200).json({
+    success: true,
+    message: "Password changed successfully",
+  });
+});
 
+/* ===================== OTP ===================== */
 
-    const otpPayload = { email, otp }
-    const otpBody = await OTP.create(otpPayload)
-    
-    res.status(200).json({
-      success: true,
-      message: `OTP Sent Successfully`,
-      otp,
-    })
-  
+export const sendotp = catchAsyncErrors(async (req, res) => {
+  const { email } = req.body;
+
+  let otp = otpGenerator.generate(6, {
+    upperCaseAlphabets: false,
+    lowerCaseAlphabets: false,
+    specialChars: false,
+  });
+
+  let result = await OTP.findOne({ otp });
+  while (result) {
+    otp = otpGenerator.generate(6, { upperCaseAlphabets: false });
+    result = await OTP.findOne({ otp });
+  }
+
+  await OTP.create({ email, otp });
+
+  res.status(200).json({
+    success: true,
+    message: "OTP Sent Successfully",
+    otp,
+  });
 });
