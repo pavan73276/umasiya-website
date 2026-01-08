@@ -16,6 +16,8 @@ export const generateToken = (user, message, statusCode, res) => {
   res
     .status(statusCode)
     .cookie(cookieName, token, {
+      secure: true,            // ✅ REQUIRED FOR HTTPS (Netlify)
+      sameSite: "none", 
       expires: new Date(
         Date.now() + cookieExpireDays * 24 * 60 * 60 * 1000
       ),
